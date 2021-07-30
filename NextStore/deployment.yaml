@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vm-dev
+  annotations:
+    oneagent.dynatrace.com/inject: "true"
+  labels:
+    name: dev
+    oneagent.dynatrace.com/instance: oneagentapm
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextstore-app
+  namespace: vm-dev
+  labels:
+    app: nextstore
+    tier: dev
+spec:
+  selector:
+    matchLabels:
+      app: nextstore
+      dep: DOD   
+  replicas: 1
+  template:
+    metadata:
+      name: nextstore-app
+      annotations: 
+        nextstore.com/owner: "Sean Mattis"
+        nextstore.com/email: "sean.mattis@dynatrace.com"
+        nextstore.com/department: "DOD"
+      labels:
+        app: nextstore 
+        dep: DOD   
+    spec:    
+      containers:
+        - name: nextstore-app
+          image: seanmattisdocker/nextstore:nooneagentjs
+          ports:
+            - containerPort: 80
+          env:
+          - name: "ASPNETCORE_ENVIRONMENT"
+            value: Development
+          volumeMounts:
+          - name: secrets
+            mountPath: /app/secrets
+            readOnly: true
+      volumes:
+      - name: secrets
+        secret:
+          secretName: secret-appsettings
+          
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextstore-service
+  namespace: vm-dev
+  labels:
+    app: nextstore
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+  selector:
+      app: nextstore 
+      dep: DOD  
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: annotations-demo
+  namespace: vm-dev
+  labels:
+    app: nginx
+    dep: DOD
+  annotations:
+    imageregistry: "https://hub.docker.com/"    
+    oneagent.dynatrace.com/inject: "false"
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.14.2
+    ports:
+    - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: vm-dev
+spec:
+  selector:
+    app: nginx
+    dep: DOD
+  type: NodePort
+  ports:
+    - targetPort: 80
+      port: 80
+      nodePort: 30100

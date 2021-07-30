@@ -1,0 +1,4 @@
+NextStore/bin/*
+NextStore/obj/*
+NextStore/appsettings.Development.json
+NextStore/appsettings.json

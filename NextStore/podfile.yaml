@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nextstore-pod
+  namespace: vm-dev
+  labels:
+    app: nextstore-app
+spec:      
+  containers:
+    - name: nextstore
+      image: helloworld
+      ports:
+        - containerPort: 80
