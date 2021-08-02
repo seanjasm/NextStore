@@ -10,6 +10,21 @@ metadata:
 
 ---
 
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-limitlrange
+spec:
+  limits:
+    - default:
+       memory: 512Mi
+      defaultRequest:
+        memory: 256Mi
+      type: Container
+    
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:

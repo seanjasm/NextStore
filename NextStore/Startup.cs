@@ -53,7 +53,7 @@ namespace NextStore
         {
             var builder = new ConfigurationBuilder()
                             .SetBasePath(env.ContentRootPath)
-                            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                            //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                             .AddJsonFile("secrets/appsettings.json", optional: true)
                             .AddEnvironmentVariables();
 
