@@ -58,6 +58,8 @@ spec:
           env:
           - name: "ASPNETCORE_ENVIRONMENT"
             value: Development
+          - name: "DT_CUSTOM_PROP"
+            value: "app=nextstore type=inline onwer=SeanMattis"
           volumeMounts:
           - name: secrets
             mountPath: /app/secrets
