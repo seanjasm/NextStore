@@ -22,6 +22,10 @@ namespace NextStore.Controllers
         { 
             ViewData["Envname"] = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             ViewData["Hostname"] = Environment.MachineName;
+            foreach (string command in Environment.GetCommandLineArgs())
+            {
+                ViewData["Command"] = " " + command;
+            }
 
             return View();
         }
